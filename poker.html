@@ -1,0 +1,57 @@
+<html>
+<head>
+<link rel="stylesheet" href="poker.css" />
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="player.js"></script>
+<script type="text/javascript" src="seat.js"></script>
+<script type="text/javascript" src="table.js"></script>
+<script type="text/javascript" src="tournament.js"></script>
+<script type="text/javascript">
+$(document).on('keyup', '#inputConsole',function(event){
+	if(event.keyCode != 13) return;
+	command = $('#inputConsole').val().match(/^([a-zA-Z]*)/);
+	if(command == null) return;
+	switch(command[1])
+	{
+		case 'at':
+		case 'addtournament':
+			tournamentVars = $('#inputConsole').val().match(/^([a-zA-Z]*)\s?([a-zA-Z]*)\s?(\d*)/);
+			if(tournamentVars[2] == '') tournamentTitle = prompt('tournament title');
+			else tournamentTitle = tournamentVars[2];
+			if(tournamentVars[3] == '') iTables= prompt('number of tables');
+			else iTables = tournamentVars[3];
+			tournaments.push(new tournament($('body:first'), tournamentTitle, iTables));
+			break;
+		case 'rt':
+		case 'removetournament':
+			tournamentVars = $('#inputConsole').val().match(/^([a-zA-Z]*)\s?([a-zA-Z]*)\s?(\d*)/);
+			if(tournamentVars[2] == '') tournamentTitle = prompt('tournament title');
+			else tournamentTitle = tournamentVars[2];
+			if(tournamentVars[3] == '') iTables= prompt('number of tables');
+			else iTables = tournamentVars[3];
+			for(t in tournaments)
+			{
+				if(tournaments[t].tournamentTitle == tournamentTitle)
+				{
+					tournaments[t].deconstruct();
+					break;
+				}
+			}
+			break;
+	}
+	$('#inputConsole').val('');
+});
+
+// test
+$(document).ready(function(){
+	tournaments.push(new tournament($('body:first'), 'test', 1));
+	tournaments[0].addPlayer({data:{me: tournaments[0]}});
+});
+</script>
+<link rel="icon" href="chip.png" type="image/png" />
+<title>poker</title>
+</head>
+<body>
+<input type="text" id="inputConsole" />
+</body>
+</html>
